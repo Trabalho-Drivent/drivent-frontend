@@ -1,4 +1,4 @@
-# drivent-front teste
+# drivent-front
 
 Front-end for Driven.t, an event management solution.
 
