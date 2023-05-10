@@ -4,25 +4,28 @@ import { useState } from 'react';
 
 export default function TicketTypes() {
   const [selected, setSelected] = useState(false);
+  const [ticket, setTicket] = useState(false);
   return (
     <>
       <Container>
         <h1>Primeiro, escolha sua modalidade de ingresso</h1>
         <Boxes>
-          <SelectBox setSelected={setSelected} text={'Presencial'} textPrice={'R$250'} />
-          {console.log(selected)}
-          <SelectBox setSelected={setSelected} text={'Online'} textPrice={'R$100'} />
+          <SelectBox setSelected={setSelected} text={'Presencial'} textPrice={'R$250'} setTicket={setTicket}  />
+          <SelectBox setSelected={setSelected} text={'Online'} textPrice={'R$100'} setTicket={setTicket} />
         </Boxes>
       </Container>
       {selected.option && (
         <Container>
           <h1>Ótimo! Agora escolha sua modalidade de hospedagem</h1>
           <Boxes>
-            <SelectBox setSelected={setSelected} text={'Sem Hotel'} textPrice={'R$0'} />
-            <SelectBox setSelected={setSelected} text={'Com Hotel'} textPrice={'R$350'} />
+            <SelectBox setSelected={setSelected} text={'Sem Hotel'} textPrice={'R$0'} onClick={() => setTicket(true)} setTicket={setTicket}  />
+            <SelectBox setSelected={setSelected} text={'Com Hotel'} textPrice={'R$350'} onClick={() => setTicket(true)}  setTicket={setTicket} />
           </Boxes>
+
         </Container>
       )}
+
+      {ticket && 'buton'}
     </>
   );
 }

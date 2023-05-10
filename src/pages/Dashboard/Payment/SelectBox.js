@@ -1,9 +1,16 @@
 import styled from 'styled-components';
 
-export default function SelectBox({ text, textPrice, setSelected }) {
+export default function SelectBox({ text, textPrice, setSelected, setTicket }) {
   const option = text === 'Online' ? false : true;
-  return (
-    <Container onClick={() => setSelected({ option })}>
+  return (    
+    <Container onClick={() => {
+      setSelected({ option });
+      if(text === 'Online' || text==='Com Hotel' || text === 'Sem Hotel') {
+        setTicket(true);  
+      } else {
+        setTicket(false);
+      }
+    }}>
       <h2>{text}</h2>
       <h3>{textPrice}</h3>
     </Container>
