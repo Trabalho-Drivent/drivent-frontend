@@ -1,12 +1,26 @@
 import styled from 'styled-components';
 import SelectBox from './SelectBox';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import api from '../../../services/api';
+import useToken from '../../../hooks/useToken';
 
 export default function TicketTypes() {
   const [selected, setSelected] = useState(false);
   const [ticket, setTicket] = useState(false);
   const [ticketType, setTicketType] = useState([false, false, false, false]);
+  const [ticketTypeId, setTicketTypeId] = useState();
   const array = [...ticketType];
+  const token = useToken();
+  console.log(token);
+
+  useEffect(async() => {
+    const ticketTypes = await api.get('/tickets/types', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(ticketTypes);
+  }, []);
 
   function calculateTicketPrice() {
     if (JSON.stringify(ticketType) === JSON.stringify([false, true, false, true])) return 250;
