@@ -5,10 +5,16 @@ import { useState } from 'react';
 export default function TicketTypes() {
   const [selected, setSelected] = useState(false);
   const [ticket, setTicket] = useState(false);
-  const [isChosenPresencial, setIsChosenPresencial] = useState(false);
-  const [isChosenOnline, setIsChosenOnline] = useState(false);
-  const [isChosenSemHotel, setIsChosenSemHotel] = useState(false);
-  const [isChosenComHotel, setIsChosenComHotel] = useState(false);
+  const [ticketType, setTicketType] = useState([false, false, false, false]);
+  const array = [...ticketType];
+
+  function calculateTicketPrice() {
+    if (JSON.stringify(ticketType) === JSON.stringify([false, true, false, true])) return 250;
+    if (JSON.stringify(ticketType) === JSON.stringify([false, true, true, false])) return 600;
+    if (JSON.stringify(ticketType) === JSON.stringify([true, false, false, false])) return 100;
+  }
+
+  const ticketPrice = calculateTicketPrice();
 
   return (
     <>
@@ -16,22 +22,22 @@ export default function TicketTypes() {
         <h1>Primeiro, escolha sua modalidade de ingresso</h1>
         <Boxes>
           <SelectBox
-            isChosenPresencial={isChosenPresencial}
-            setIsChosenPresencial={setIsChosenPresencial}
-            setIsChosenOnline={setIsChosenOnline}
             setSelected={setSelected}
             text={'Presencial'}
             textPrice={'R$250'}
             setTicket={setTicket}
+            ticketType={ticketType[1]}
+            setTicketType={setTicketType}
+            array={array}
           />
           <SelectBox
-            isChosenOnline={isChosenOnline}
-            setIsChosenPresencial={setIsChosenPresencial}
-            setIsChosenOnline={setIsChosenOnline}
             setSelected={setSelected}
             text={'Online'}
             textPrice={'R$100'}
             setTicket={setTicket}
+            ticketType={ticketType[0]}
+            setTicketType={setTicketType}
+            array={array}
           />
         </Boxes>
       </Container>
@@ -45,6 +51,9 @@ export default function TicketTypes() {
               textPrice={'R$0'}
               onClick={() => setTicket(true)}
               setTicket={setTicket}
+              ticketType={ticketType[3]}
+              setTicketType={setTicketType}
+              array={array}
             />
             <SelectBox
               setSelected={setSelected}
@@ -52,6 +61,9 @@ export default function TicketTypes() {
               textPrice={'R$350'}
               onClick={() => setTicket(true)}
               setTicket={setTicket}
+              ticketType={ticketType[2]}
+              setTicketType={setTicketType}
+              array={array}
             />
           </Boxes>
         </Container>

@@ -1,11 +1,40 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-export default function SelectBox({ text, textPrice, setSelected, setTicket }) {
+export default function SelectBox({ text, textPrice, setSelected, setTicket, ticketType, setTicketType, array }) {
   const option = text === 'Online' ? false : true;
   const [checkBox, setCheckBox] = useState(false);
 
   const handleClick = () => {
+    let ticket = array;
+
+    if (text === 'Presencial' || text === 'Online') {
+      if (text === 'Presencial' && (ticket[0] && ticket[1]) === false) {
+        ticket = [true, false, ticket[2], ticket[3]];
+        setTicketType(ticket);
+      } else if (text === 'Online' && (ticket[0] && ticket[1]) === false) {
+        ticket = [false, true, false, false];
+        setTicketType(ticket);
+      }
+      if (ticket[0] === true) {
+        ticket = [false, true, ticket[2], ticket[3]];
+        setTicketType(ticket);
+      } else {
+        ticket = [true, false, ticket[2], ticket[3]];
+        setTicketType(ticket);
+      }
+    }
+
+    if (text === 'Sem Hotel' || text === 'Com Hotel') {
+      if (text === 'Com Hotel' && (ticket[2] && ticket[3]) === false) {
+        ticket = [ticket[0], ticket[1], true, false];
+        setTicketType(ticket);
+      } else if (text === 'Sem Hotel' && (ticket[2] && ticket[3]) === false) {
+        ticket = [ticket[0], ticket[1], false, true];
+        setTicketType(ticket);
+      }
+    }
+
     setSelected({ option });
     setCheckBox(!checkBox);
     if (text === 'Online' || text === 'Com Hotel' || text === 'Sem Hotel') {
@@ -16,9 +45,10 @@ export default function SelectBox({ text, textPrice, setSelected, setTicket }) {
   };
 
   return (
-    <Container checkBox={checkBox} onClick={handleClick}>
+    <Container checkBox={ticketType} onClick={handleClick}>
       <h2>{text}</h2>
       <h3>{textPrice}</h3>
+      {console.log(ticketType)}
     </Container>
   );
 }
