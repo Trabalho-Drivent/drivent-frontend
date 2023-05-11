@@ -11,7 +11,6 @@ export default function TicketTypes() {
   const [ticketTypeId, setTicketTypeId] = useState();
   const array = [...ticketType];
   const token = useToken();
-  console.log(token);
 
   useEffect(async() => {
     const ticketTypes = await api.get('/tickets/types', {
@@ -19,20 +18,23 @@ export default function TicketTypes() {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(ticketTypes);
+    const types = ticketTypes.data;
+    setTicketTypeId(types);
   }, []);
 
-  function calculateTicketPrice() {
-    if (JSON.stringify(ticketType) === JSON.stringify([false, true, false, true])) return 250;
-    if (JSON.stringify(ticketType) === JSON.stringify([false, true, true, false])) return 600;
-    if (JSON.stringify(ticketType) === JSON.stringify([true, false, false, false])) return 100;
+  function checkTicketTypeId() {
+    if (JSON.stringify(ticketType) === JSON.stringify([false, true, false, true])) return ticketTypeId[0].id;
+    if (JSON.stringify(ticketType) === JSON.stringify([false, true, true, false])) return ticketTypeId[1].id;
+    if (JSON.stringify(ticketType) === JSON.stringify([true, false, false, false])) return ticketTypeId[2].id;
   }
 
-  const ticketPrice = calculateTicketPrice();
+  const ticketId = checkTicketTypeId();
 
   return (
     <>
       <Container>
+        {console.log(ticketTypeId)}
+        {console.log(ticketId)}
         <h1>Primeiro, escolha sua modalidade de ingresso</h1>
         <Boxes>
           <SelectBox
