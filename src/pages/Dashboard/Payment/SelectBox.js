@@ -1,16 +1,22 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 export default function SelectBox({ text, textPrice, setSelected, setTicket }) {
   const option = text === 'Online' ? false : true;
-  return (    
-    <Container onClick={() => {
-      setSelected({ option });
-      if(text === 'Online' || text==='Com Hotel' || text === 'Sem Hotel') {
-        setTicket(true);  
-      } else {
-        setTicket(false);
-      }
-    }}>
+  const [checkBox, setCheckBox] = useState(false);
+
+  const handleClick = () => {
+    setSelected({ option });
+    setCheckBox(!checkBox);
+    if (text === 'Online' || text === 'Com Hotel' || text === 'Sem Hotel') {
+      setTicket(true);
+    } else {
+      setTicket(false);
+    }
+  };
+
+  return (
+    <Container checkBox={checkBox} onClick={handleClick}>
       <h2>{text}</h2>
       <h3>{textPrice}</h3>
     </Container>
@@ -21,7 +27,7 @@ const Container = styled.div`
   box-sizing: border-box;
   width: 145px;
   height: 145px;
-
+  background-color: ${(props) => (props.checkBox ? '#FFEED2' : '#ffffff')};
   border: 1px solid #cecece;
   border-radius: 20px;
   font-family: 'Roboto';
