@@ -4,7 +4,7 @@ import 'react-credit-cards/es/styles-compiled.css';
 import { useState } from 'react';
 import format from './format';
 
-export default function FormCard() {
+export default function FormCard({ setButtonClicked }) {
   const [focus, setFocus] = useState('');
   const [form, setForm] = useState({
     name: '',
@@ -36,20 +36,30 @@ export default function FormCard() {
     setForm({ ...form, [name]: formattedValue });
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(form.number.length === 16 || form.cvc.length === 3 || form.cvc === 4) {
+      alert('oi');
+    };
+  };
+
   return (
-    <Section>
-      <CardsContainer>
-        <Cards cvc={form.cvc} expiry={form.expiry} focused={focus} name={form.name} number={form.number} />
-      </CardsContainer>
-      <Container>
-        <input type="tel" name="number" onChange={handleInputChange} onFocus={handleInputFocus} placeholder="Card Number" value={(form.number).replace(/(\d{4})(?=\d)/g, '$1-')} />
-        <span>E.g.: 49..., 51..., 36..., 37...</span>
-        <input type="text" name="name" onChange={handleInputChange} onFocus={handleInputFocus} placeholder="Name" value={form.name} />
-        <div>
-          <input type="tel" name="expiry" onChange={handleInputChange} onFocus={handleInputFocus} placeholder="Valid Thru" value={form.expiry} />
-          <input type="tel" name="cvc" onChange={handleInputChange} onFocus={handleInputFocus} placeholder="CVC" value={form.cvc} />
-        </div>
-      </Container>
+    <Section>      
+      <div>
+        <CardsContainer>
+          <Cards cvc={form.cvc} expiry={form.expiry} focused={focus} name={form.name} number={form.number} />
+        </CardsContainer>
+        <Container id="myForm" onSubmit={handleSubmit}>
+          <input type="tel" name="number" onChange={handleInputChange} onFocus={handleInputFocus} placeholder="Card Number" value={(form.number).replace(/(\d{4})(?=\d)/g, '$1-')} />
+          <span>E.g.: 49..., 51..., 36..., 37...</span>
+          <input type="text" name="name" onChange={handleInputChange} onFocus={handleInputFocus} placeholder="Name" value={form.name} />
+          <div>
+            <input type="tel" name="expiry" onChange={handleInputChange} onFocus={handleInputFocus} placeholder="Valid Thru" value={form.expiry} />
+            <input type="tel" name="cvc" onChange={handleInputChange} onFocus={handleInputFocus} placeholder="CVC" value={form.cvc} />
+          </div>
+        </Container>
+      </div>
+      <button type='submit' form='myForm' onClick={() => setButtonClicked(true)}>FINALIZAR PAGAMENTO</button>
     </Section>
   );
 }
@@ -96,13 +106,34 @@ const Container = styled.form`
 `;
 
 const Section = styled.section`
-  max-width: 706px;
-  display: flex;
+  > div {
+    max-width: 706px;
+    display: flex;
+  }
+
+
+  > button {
+    width: 182px;
+    height: 37px;
+    background-color: #E0E0E0;
+    font-family: 'Roboto';
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    border: none;
+    margin-top: 40px;
+    background: #E0E0E0;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    cursor: pointer;
+  }
   
 
   @media(max-width: 900px){
-    flex-direction: column;
-    gap: 20px;
+    > div {
+      flex-direction: column;
+      gap: 20px;
+    } 
   }
 `;
 
