@@ -30,6 +30,9 @@ export default function FormCard({ setButtonClicked }) {
     case 'cvc':
       formattedValue = format.formatCardCvc(value);
       break;
+    case 'name':
+      formattedValue = format.formatCardName(value);
+      break;
     default:
       break;
     }
@@ -38,8 +41,9 @@ export default function FormCard({ setButtonClicked }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(form.number.length === 16 || form.cvc.length === 3 || form.cvc === 4) {
-      alert('oi');
+    const validForm = format.formatCardAll(form);
+    if(validForm) {
+      setButtonClicked(true);
     };
   };
 
@@ -59,7 +63,7 @@ export default function FormCard({ setButtonClicked }) {
           </div>
         </Container>
       </div>
-      <button type='submit' form='myForm' onClick={() => setButtonClicked(true)}>FINALIZAR PAGAMENTO</button>
+      <button type='submit' form='myForm'>FINALIZAR PAGAMENTO</button>
     </Section>
   );
 }
@@ -69,7 +73,7 @@ const Container = styled.form`
   width: 100%;
   > input,
   div > input {
-    width: 100%;
+    width: 100%;  
     height: 45px;
     padding-left: 10px;
     border-radius: 5px;

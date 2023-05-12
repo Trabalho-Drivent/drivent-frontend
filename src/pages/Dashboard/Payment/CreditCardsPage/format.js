@@ -29,10 +29,29 @@ function formatCardCvc(value) {
   return value;
 }
 
+function formatCardName(value) {
+  value = value.replace(/[^a-zA-Z\s]/g, '');
+
+  return value;
+}
+
+function formatCardAll(form) {
+  const name = form.name.length >= 3;
+  const cvc = /^[0-9]{3,4}$/.test(form.cvc);
+  const expiry = /^\d{2}\/\d{2}$/.test(form.expiry);
+  const number = form.number.length === 16;
+  if (name && cvc && expiry && number) {
+    return true;
+  }
+  return false;
+}
+
 const cardFormat = {
   formatCardCvc,
   formatCardExpiry,
   formatCardNumber,
+  formatCardName,
+  formatCardAll,
 };
 
 export default cardFormat;
