@@ -3,9 +3,12 @@ import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
 import { useState } from 'react';
 import format from './format';
+import usePayment from '../../../../hooks/api/usePayment';
+import { toast } from 'react-toastify';
 
 export default function FormCard({ setButtonClicked }) {
   const [focus, setFocus] = useState('');
+  const { payment } = usePayment();
   const [form, setForm] = useState({
     name: '',
     cvc: '',
@@ -39,12 +42,31 @@ export default function FormCard({ setButtonClicked }) {
     setForm({ ...form, [name]: formattedValue });
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     const validForm = format.formatCardAll(form);
-    if(validForm) {
-      setButtonClicked(true);
+    if(!validForm) {
+      return toast('Por favor, revise os dados do cartão e tente novamente!');
+    }
+
+    const body = {
+      ticketId: 1,
+      cardData: {
+        issuer: 'Visa',
+        number: form.number,
+        name: form.name,
+        expirationDate: form.expiry,
+        cvv: form.cvc
+      }
     };
+
+    try {
+      await payment(body);
+      toast('Pagamento realizado com sucesso!');
+      setButtonClicked(true);
+    } catch (error) {
+      toast('Tente novamente mais tarde!');
+    }
   };
 
   return (
@@ -125,7 +147,7 @@ const Section = styled.section`
     line-height: 16px;
     text-align: center;
     border: none;
-    margin-top: 40px;
+    margin: 40px 0;
     background: #E0E0E0;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
     border-radius: 4px;
