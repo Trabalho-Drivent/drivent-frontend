@@ -1,3 +1,11 @@
+import Warning from '../../../layouts/Warning';
+
 export default function Hotel() {
-  return 'Hotel: Em breve!';
+  return (
+    <>
+      <Warning>
+        <p>Sua modalidade de ingresso não inclui hospedagem Prossiga para escolha de atividades</p>
+      </Warning>
+    </>
+  );
 }
