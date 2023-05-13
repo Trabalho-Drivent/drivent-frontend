@@ -48,7 +48,6 @@ export default function SelectBox({ text, textPrice, setSelected, setTicket, tic
     <Container checkBox={ticketType} onClick={handleClick}>
       <h2>{text}</h2>
       <h3>{textPrice}</h3>
-      {console.log(ticketType)}
     </Container>
   );
 }
