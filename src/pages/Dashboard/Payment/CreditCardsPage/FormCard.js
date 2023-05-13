@@ -49,7 +49,6 @@ export default function FormCard({ setButtonClicked, userTicket }) {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log(userTicket);
     const validForm = format.formatCardAll(form);
     if(!validForm) {
       return toast('Por favor, revise os dados do cartão e tente novamente!');
