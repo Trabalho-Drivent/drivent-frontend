@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import useEnrollment from '../../../hooks/api/useEnrollment';
 import NoticePage from './NoticePage';
-import CreditCardsPage from './CreditCardsPage/CreditCardsPage';
+import TicketTypes from './SelectTicketTypes';
 
 export default function Payment() {
   const { enrollment } = useEnrollment();
@@ -9,7 +9,14 @@ export default function Payment() {
   return (
     <Container>
       <h1>Ingresso e pagamento</h1>
-      {!enrollment ? <NoticePage /> : <CreditCardsPage />}
+      {!enrollment ? (
+        <NoticePage />
+      ) : (
+        <>
+          {' '}
+          <TicketTypes />
+        </>
+      )}
     </Container>
   );
 }
