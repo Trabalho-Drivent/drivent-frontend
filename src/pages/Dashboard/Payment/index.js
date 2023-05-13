@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import useEnrollment from '../../../hooks/api/useEnrollment';
 import NoticePage from './NoticePage';
 import TicketTypes from './SelectTicketTypes';
-import { useState } from 'react';
 
 export default function Payment() {
   const { enrollment } = useEnrollment();
