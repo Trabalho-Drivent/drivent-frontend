@@ -3,6 +3,7 @@ import SelectBox from './SelectBox';
 import { useEffect, useState } from 'react';
 import api from '../../../services/api';
 import useToken from '../../../hooks/useToken';
+import CreditCardsPage from './CreditCardsPage/CreditCardsPage';
 
 export default function TicketTypes() {
   const [selected, setSelected] = useState(false);
@@ -117,7 +118,7 @@ export default function TicketTypes() {
       </>
     );
   }
-  return <h1>Denilson</h1>;
+  return <CreditCardsPage />;
 }
 
 const Container = styled.div`
