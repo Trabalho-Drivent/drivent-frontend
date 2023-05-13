@@ -4,7 +4,7 @@ import FormCard from './FormCard';
 import { IoCheckmarkCircleSharp } from 'react-icons/io5';
 import { useState } from 'react';
 
-export default function CreditCardsPage() {
+export default function CreditCardsPage({ userTicket }) {
   const [buttonClicked, setButtonClicked] = useState(false);
 
   return (
@@ -19,9 +19,9 @@ export default function CreditCardsPage() {
             <p>Pagamento confirmado!</p>
             <span>Prossiga para escolha de hospedagem e atividades</span>
           </div>
-        </FinalizePayment >
+        </FinalizePayment>
       ) : (
-        <FormCard setButtonClicked={setButtonClicked}/>
+        <FormCard setButtonClicked={setButtonClicked} />
       )}
     </Container>
   );
