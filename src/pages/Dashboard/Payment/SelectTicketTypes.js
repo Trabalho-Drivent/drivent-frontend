@@ -13,6 +13,7 @@ export default function TicketTypes() {
   const array = [...ticketType];
   const token = useToken();
   const [isBooked, setIsBooked] = useState(false);
+  const [userTicket, setUserTicket] = useState([]);
 
   useEffect(async() => {
     const ticketTypes = await api.get('/tickets/types', {
@@ -44,11 +45,12 @@ export default function TicketTypes() {
     const body = {
       ticketTypeId: ticketId,
     };
-    await api.post('/tickets', body, {
+    const response = await api.post('/tickets', body, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+    setUserTicket(response.data);
     setIsBooked(true);
   }
   if (!isBooked) {
@@ -57,6 +59,7 @@ export default function TicketTypes() {
         <Container>
           {console.log(ticketTypeId)}
           {console.log(ticketId)}
+          {console.log(userTicket)}
           <h1>Primeiro, escolha sua modalidade de ingresso</h1>
           <Boxes>
             <SelectBox
@@ -118,7 +121,7 @@ export default function TicketTypes() {
       </>
     );
   }
-  return <CreditCardsPage />;
+  return <CreditCardsPage  userTicket={userTicket}/>;
 }
 
 const Container = styled.div`
@@ -164,6 +167,7 @@ const Book = styled.div`
     font-size: 14px;
     line-height: 16px;
     text-align: center;
+    margin-bottom: 20px;
 
     color: #000000;
 
