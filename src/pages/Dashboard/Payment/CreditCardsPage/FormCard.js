@@ -6,7 +6,7 @@ import format from './format';
 import usePayment from '../../../../hooks/api/usePayment';
 import { toast } from 'react-toastify';
 
-export default function FormCard({ setButtonClicked }) {
+export default function FormCard({ setButtonClicked, userTicket }) {
   const [focus, setFocus] = useState('');
   const { payment } = usePayment();
   const [form, setForm] = useState({
@@ -49,13 +49,14 @@ export default function FormCard({ setButtonClicked }) {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+    console.log(userTicket);
     const validForm = format.formatCardAll(form);
     if(!validForm) {
       return toast('Por favor, revise os dados do cartão e tente novamente!');
     }
 
     const body = {
-      ticketId: 1,
+      ticketId: userTicket.id,
       cardData: {
         issuer: form.issuer,
         number: form.number,
