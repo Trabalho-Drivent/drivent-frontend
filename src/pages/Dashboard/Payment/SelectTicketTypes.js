@@ -57,9 +57,6 @@ export default function TicketTypes() {
     return (
       <>
         <Container>
-          {console.log(ticketTypeId)}
-          {console.log(ticketId)}
-          {console.log(userTicket)}
           <h1>Primeiro, escolha sua modalidade de ingresso</h1>
           <Boxes>
             <SelectBox

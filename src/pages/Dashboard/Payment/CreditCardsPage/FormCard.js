@@ -6,7 +6,7 @@ import format from './format';
 import usePayment from '../../../../hooks/api/usePayment';
 import { toast } from 'react-toastify';
 
-export default function FormCard({ setButtonClicked }) {
+export default function FormCard({ setButtonClicked, userTicket }) {
   const [focus, setFocus] = useState('');
   const { payment } = usePayment();
   const [form, setForm] = useState({
@@ -14,6 +14,7 @@ export default function FormCard({ setButtonClicked }) {
     cvc: '',
     expiry: '',
     number: '',
+    issuer: ''
   });
 
   const handleInputFocus = (e) => {
@@ -42,6 +43,10 @@ export default function FormCard({ setButtonClicked }) {
     setForm({ ...form, [name]: formattedValue });
   }
 
+  const handleCallback = ({ issuer }) => {
+    setForm({ ...form, issuer });
+  };
+
   const handleSubmit = async(e) => {
     e.preventDefault();
     const validForm = format.formatCardAll(form);
@@ -50,9 +55,9 @@ export default function FormCard({ setButtonClicked }) {
     }
 
     const body = {
-      ticketId: 1,
+      ticketId: userTicket.id,
       cardData: {
-        issuer: 'Visa',
+        issuer: form.issuer,
         number: form.number,
         name: form.name,
         expirationDate: form.expiry,
@@ -73,7 +78,7 @@ export default function FormCard({ setButtonClicked }) {
     <Section>      
       <div>
         <CardsContainer>
-          <Cards cvc={form.cvc} expiry={form.expiry} focused={focus} name={form.name} number={form.number} />
+          <Cards cvc={form.cvc} expiry={form.expiry} focused={focus} name={form.name} number={form.number} callback={handleCallback} />
         </CardsContainer>
         <Container id="myForm" onSubmit={handleSubmit}>
           <input type="tel" name="number" onChange={handleInputChange} onFocus={handleInputFocus} placeholder="Card Number" value={(form.number).replace(/(\d{4})(?=\d)/g, '$1-')} />

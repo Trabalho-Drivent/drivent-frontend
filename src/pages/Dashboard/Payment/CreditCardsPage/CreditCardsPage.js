@@ -10,7 +10,7 @@ export default function CreditCardsPage({ userTicket }) {
   return (
     <Container>
       <h2>Ingresso escolhido</h2>
-      <DetailsCard />
+      <DetailsCard userTicket={userTicket}/>
       <h2>Pagamento</h2>
       {buttonClicked ? (
         <FinalizePayment>
@@ -21,7 +21,7 @@ export default function CreditCardsPage({ userTicket }) {
           </div>
         </FinalizePayment>
       ) : (
-        <FormCard setButtonClicked={setButtonClicked} />
+        <FormCard setButtonClicked={setButtonClicked} userTicket={userTicket} />
       )}
     </Container>
   );
