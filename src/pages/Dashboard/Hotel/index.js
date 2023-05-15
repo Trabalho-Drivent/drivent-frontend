@@ -5,76 +5,38 @@ import styled from 'styled-components';
 import HotelInfo from '../../../components/Hotel';
 import { IoPerson, IoPersonOutline } from 'react-icons/io5';
 import useTicket from '../../../hooks/api/useTicket';
+import { getHotels, getHotelWithRooms } from '../../../services/hotelApi';
+import useToken from '../../../hooks/useToken';
 
 export default function Hotel() {
+  const token = useToken();
   const { ticket } = useTicket();
-
-  let hotelsData = [
-    // Provisório
-    {
-      id: 1,
-      name: 'Driven Resort',
-      image: 'https://th.bing.com/th/id/OIP.4XB8NF1awQyApnQDDmBmQwHaEo?pid=ImgDet&rs=1',
-      types: 'Single, Double, Triple',
-      totalAvailableRooms: 12,
-      Rooms: [
-        {
-          id: 1,
-          name: '1',
-          capacity: 3,
-          available: 1,
-          hotelId: 1,
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: 'Atlântico',
-      image: 'https://th.bing.com/th/id/OIP.4XB8NF1awQyApnQDDmBmQwHaEo?pid=ImgDet&rs=1',
-      types: 'Single, Double, Triple',
-      totalAvailableRooms: 120,
-      Rooms: [
-        {
-          id: 1,
-          name: '1',
-          capacity: 3,
-          available: 0,
-          hotelId: 1,
-        },
-        {
-          id: 2,
-          name: '2',
-          capacity: 2,
-          available: 1,
-          hotelId: 1,
-        },
-        {
-          id: 3,
-          name: '3',
-          capacity: 2,
-          available: 2,
-          hotelId: 1,
-        },
-      ],
-    },
-  ];
-
-  useEffect(() => {
-    setHotels(hotelsData);
-  }, []);
-
-  const [showHotels, setShowHotels] = useState(true);
+  const [showHotels, setShowHotels] = useState(false);
   const [hotels, setHotels] = useState([]);
   const [hotelSelected, setHotelSelected] = useState({});
   const [roomSelected, setRoomSelected] = useState({});
 
-  const handleSelectHotel = (hotelId) => {
+  useEffect(async() => {
+    try {
+      let hotels = await getHotels(token);
+      setHotels(hotels);
+      setShowHotels(true);
+    } catch (error) {
+      console.log('Error: Get hotels');
+    }
+  }, []);
+
+  const handleSelectHotel = async(hotelId) => {
     if (hotelSelected?.id === hotelId) return setHotelSelected({});
 
     setRoomSelected({});
 
-    const hotel = hotels.find((h) => h.id === hotelId);
-    setHotelSelected(hotel);
+    try {
+      let hotelWithRoomsData = await getHotelWithRooms(hotelId, token);
+      setHotelSelected(hotelWithRoomsData);
+    } catch (error) {
+      console.log('Error: Get hotels with rooms');
+    }
   };
 
   const handleSelectRoom = (room) => {
@@ -226,6 +188,8 @@ const Rooms = styled.div`
 `;
 
 const Room = styled.div`
+  width: 220px;
+  height: 45px;
   padding: 11px 15px;
   display: flex;
   justify-content: space-between;
