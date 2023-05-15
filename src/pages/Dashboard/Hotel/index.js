@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react';
 import Warning from '../../../layouts/Warning';
+import useEnrollment from '../../../hooks/api/useEnrollment';
 import styled from 'styled-components';
 import HotelInfo from '../../../components/Hotel';
 import { IoPerson, IoPersonOutline } from 'react-icons/io5';
+import useTicket from '../../../hooks/api/useTicket';
 
 export default function Hotel() {
-  let hotelsData = [ // Provisório
+  const { ticket } = useTicket();
+
+  let hotelsData = [
+    // Provisório
     {
       id: 1,
       name: 'Driven Resort',
@@ -18,9 +23,9 @@ export default function Hotel() {
           name: '1',
           capacity: 3,
           available: 1,
-          hotelId: 1
-        }
-      ]
+          hotelId: 1,
+        },
+      ],
     },
     {
       id: 2,
@@ -34,24 +39,24 @@ export default function Hotel() {
           name: '1',
           capacity: 3,
           available: 0,
-          hotelId: 1
+          hotelId: 1,
         },
         {
           id: 2,
           name: '2',
           capacity: 2,
           available: 1,
-          hotelId: 1
+          hotelId: 1,
         },
         {
           id: 3,
           name: '3',
           capacity: 2,
           available: 2,
-          hotelId: 1
-        }
-      ]
-    }
+          hotelId: 1,
+        },
+      ],
+    },
   ];
 
   useEffect(() => {
@@ -68,7 +73,7 @@ export default function Hotel() {
 
     setRoomSelected({});
 
-    const hotel = hotels.find(h => h.id === hotelId);
+    const hotel = hotels.find((h) => h.id === hotelId);
     setHotelSelected(hotel);
   };
 
@@ -79,7 +84,37 @@ export default function Hotel() {
 
   return (
     <>
-      {showHotels &&
+      {!ticket && (
+        <>
+          <Container>
+            <Title>Escolha de Hotel e Quarto </Title>
+            <Warning>
+              <p>Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem</p>
+            </Warning>
+          </Container>
+        </>
+      )}
+      {ticket && ticket.status !== 'PAID' && (
+        <>
+          <Container>
+            <Title>Escolha de Hotel e Quarto </Title>
+            <Warning>
+              <p>Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem</p>
+            </Warning>
+          </Container>
+        </>
+      )}
+      {ticket && !ticket.TicketType.includesHotel && (
+        <>
+          <Container>
+            <Title>Escolha de Hotel e Quarto </Title>
+            <Warning>
+              <p>Sua modalidade de ingresso não inclui hospedagem Prossiga para escolha de atividades</p>
+            </Warning>
+          </Container>
+        </>
+      )}
+      {ticket && ticket.TicketType.includesHotel && showHotels && (
         <Container>
           <Title>Escolha de Hotel e Quarto</Title>
           <Subtitle>Primeiro, escolha seu hotel</Subtitle>
@@ -98,7 +133,7 @@ export default function Hotel() {
               />
             ))}
           </Hotels>
-          {hotelSelected?.Rooms?.length > 0 &&
+          {hotelSelected?.Rooms?.length > 0 && (
             <RoomsArea>
               <Subtitle2>Ótima pedida! Agora escolha seu quarto:</Subtitle2>
 
@@ -112,45 +147,42 @@ export default function Hotel() {
                   >
                     <div className="roomNumber">{room.name}</div>
                     <div className="roomPeople">
-                      {roomSelected?.id === room.id &&
+                      {roomSelected?.id === room.id && (
                         <>
-                          {Array(room.available - 1).fill(0).map((value, index) => (
-                            <IoPersonOutline key={index} className="icon" />
-                          ))}
+                          {Array(room.available - 1)
+                            .fill(0)
+                            .map((value, index) => (
+                              <IoPersonOutline key={index} className="icon" />
+                            ))}
                           <IoPerson key={index} className="icon pink" />
                         </>
-                      }
-                      {roomSelected?.id !== room.id &&
+                      )}
+                      {roomSelected?.id !== room.id && (
                         <>
-                          {Array(room.available).fill(0).map((value, index) => (
-                            <IoPersonOutline key={index} className="icon" />
-                          ))}
+                          {Array(room.available)
+                            .fill(0)
+                            .map((value, index) => (
+                              <IoPersonOutline key={index} className="icon" />
+                            ))}
                         </>
-                      }
-                      {Array(room.capacity - room.available).fill(0).map((value, index) => (
-                        <IoPerson key={index} className="icon" />
-                      ))}
+                      )}
+                      {Array(room.capacity - room.available)
+                        .fill(0)
+                        .map((value, index) => (
+                          <IoPerson key={index} className="icon" />
+                        ))}
                     </div>
                   </Room>
                 ))}
               </Rooms>
-              {roomSelected?.id &&
-                <Button>RESERVAR QUARTO</Button>
-              }
+              {roomSelected?.id && <Button>RESERVAR QUARTO</Button>}
             </RoomsArea>
-          }
+          )}
         </Container>
-
-      }
-      {!showHotels &&
-        <Warning>
-          {/* <p>Sua modalidade de ingresso não inclui hospedagem Prossiga para escolha de atividades</p> */}
-          <p>Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem</p>
-        </Warning>
-      }
+      )}
     </>
   );
-};
+}
 
 const Container = styled.div`
   margin: 35px;
@@ -163,13 +195,13 @@ const Title = styled.div`
 
 const Subtitle = styled.div`
   font-size: 20px;
-  color: #8E8E8E;
+  color: #8e8e8e;
   margin-bottom: 20px;
 `;
 
 const Subtitle2 = styled.div`
   font-size: 20px;
-  color: #8E8E8E;
+  color: #8e8e8e;
   margin-bottom: 20px;
   margin-top: 45px;
   margin-bottom: 15px;
@@ -197,28 +229,28 @@ const Room = styled.div`
   padding: 11px 15px;
   display: flex;
   justify-content: space-between;
-  border: 1px solid #CECECE;
+  border: 1px solid #cecece;
   border-radius: 10px;
-  background-color: ${props => props.selected ? '#FFEED2' : props.color};
-  
-  &:hover{
-    background-color: #FFEED2;
+  background-color: ${(props) => (props.selected ? '#FFEED2' : props.color)};
+
+  &:hover {
+    background-color: #ffeed2;
     cursor: pointer;
   }
 
-  .roomNumber{
+  .roomNumber {
     font-size: 20px;
     color: #454545;
     font-weight: bold;
     margin-right: 75px;
   }
-  .roomPeople{
+  .roomPeople {
     display: flex;
   }
-  .pink{
-    color: #FF4791;
+  .pink {
+    color: #ff4791;
   }
-  .icon{
+  .icon {
     height: 25px;
     width: 25px;
     margin-left: 3px;
@@ -236,12 +268,12 @@ const Button = styled.button`
   align-items: center;
   width: 182px;
   height: 37px;
-  background-color: #E0E0E0;
+  background-color: #e0e0e0;
   border-radius: 5px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
 
-  &:hover{
-    background-color: #FFEED2;
+  &:hover {
+    background-color: #ffeed2;
     cursor: pointer;
   }
 `;
