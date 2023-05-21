@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export default function HotelInfo({ handleSelectHotel, id, selected, urlImage, hotelName, hotelType, hotelCapacity }) {
+export default function HotelInfo({ subtitle1, subtitle2, handleSelectHotel, id, selected, urlImage, hotelName, hotelType, hotelCapacity }) {
   return (
     <Container selected={selected} onClick={() => handleSelectHotel(id)}>
       <Image src={urlImage}>
@@ -9,10 +9,10 @@ export default function HotelInfo({ handleSelectHotel, id, selected, urlImage, h
 
       <Title>{hotelName}</Title>
 
-      <Subtitle>Tipos de acomodação:</Subtitle>
+      <Subtitle>{subtitle1}</Subtitle>
       <Description>{hotelType}</Description>
 
-      <Subtitle>Vagas disponíveis:</Subtitle>
+      <Subtitle>{subtitle2}</Subtitle>
       <Description>{hotelCapacity}</Description>
     </Container>
   );
