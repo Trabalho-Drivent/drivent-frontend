@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import Warning from '../../../layouts/Warning';
-import useEnrollment from '../../../hooks/api/useEnrollment';
 import styled from 'styled-components';
 import HotelInfo from '../../../components/Hotel';
 import { IoPerson, IoPersonOutline } from 'react-icons/io5';
 import useTicket from '../../../hooks/api/useTicket';
 import { getHotels, getHotelWithRooms } from '../../../services/hotelApi';
 import useToken from '../../../hooks/useToken';
+import { addBooking, changeBooking, getBooking } from '../../../services/bookingApi';
 
 export default function Hotel() {
   const token = useToken();
@@ -15,27 +15,87 @@ export default function Hotel() {
   const [hotels, setHotels] = useState([]);
   const [hotelSelected, setHotelSelected] = useState({});
   const [roomSelected, setRoomSelected] = useState({});
+  const [hotelBooked, setHotelBooked] = useState({});
+  const [roomBooked, setRoomBooked] = useState({});
+  const [booking, setBooking] = useState({});
 
-  useEffect(async() => {
+  useEffect(() => {
+    handleGetHotel();
+  }, []);
+
+  const handleGetHotel = async() => {
+    setShowHotels(false);
+    setHotels({});
+
+    const booking = await handleGetBooking();
+    setBooking(booking);
+
+    const hotelId = booking?.Room?.hotelId;
+    try {
+      let hotels = await getHotels(token);
+
+      if (booking?.id) {
+        let hotelWithRoomsData = await getHotelWithRooms(hotelId, token);
+        let roomData = hotelWithRoomsData.Rooms.filter(room => room.id === booking.Room.id)[0];
+
+        setRoomBooked(roomData);
+        setHotelBooked(hotelWithRoomsData);
+      } else {
+        setHotels(hotels);
+        setShowHotels(true);
+      }
+    } catch (error) {
+      console.log('Error: Get hotels');
+    }
+  };
+  
+  const handleGetBooking = async() => {
+    try {
+      let booking = await getBooking(token);
+      return booking;
+    } catch (error) {
+      return {};
+    }
+  };
+
+  const handleAddOrChangeBooking = async(roomId) => {
+    try {
+      if (booking?.id) {
+        await changeBooking(token, booking.id, roomId);
+      } else {
+        await addBooking(token, roomId);
+      }
+
+      handleGetHotel();
+    } catch (error) {
+      console.log('Error: add booking');
+    }
+  };
+
+  const handleChangeBooking = async() => {
+    setRoomBooked({});
+    setHotelBooked({});
+
     try {
       let hotels = await getHotels(token);
       setHotels(hotels);
       setShowHotels(true);
     } catch (error) {
-      console.log('Error: Get hotels');
+      console.log('Error: change booking');
     }
-  }, []);
+  };
 
   const handleSelectHotel = async(hotelId) => {
-    if (hotelSelected?.id === hotelId) return setHotelSelected({});
+    if (!hotelBooked?.id) {
+      if (hotelSelected?.id === hotelId) return setHotelSelected({});
+      setRoomSelected({});
 
-    setRoomSelected({});
-
-    try {
-      let hotelWithRoomsData = await getHotelWithRooms(hotelId, token);
-      setHotelSelected(hotelWithRoomsData);
-    } catch (error) {
-      console.log('Error: Get hotels with rooms');
+      try {
+        let hotelWithRoomsData = await getHotelWithRooms(hotelId, token);
+        setHotelSelected(hotelWithRoomsData);
+      } catch (error) {
+        console.log('Error: Get hotels with rooms');
+      }
     }
   };
 
@@ -84,6 +144,8 @@ export default function Hotel() {
           <Hotels>
             {hotels.map((hotel, index) => (
               <HotelInfo
+                subtitle1="Tipos de acomodação:"
+                Subtitle2="Vagas disponíveis:"
                 handleSelectHotel={handleSelectHotel}
                 key={index}
                 selected={hotel.id === hotelSelected?.id}
@@ -137,9 +199,30 @@ export default function Hotel() {
                   </Room>
                 ))}
               </Rooms>
-              {roomSelected?.id && <Button>RESERVAR QUARTO</Button>}
+              {roomSelected?.id && <Button onClick={() => handleAddOrChangeBooking(roomSelected.id)}>RESERVAR QUARTO</Button>}
             </RoomsArea>
           )}
+        </Container>
+      )}
+      {ticket && ticket.TicketType.includesHotel && !showHotels && hotelBooked?.id && (
+        <Container>
+          <Title>Escolha de Hotel e Quarto</Title>
+          <Subtitle>Você já escolheu seu quarto</Subtitle>
+
+          <Hotels>
+            <HotelInfo
+              subtitle1="Quarto reservado"
+              subtitle2="Pessoas no seu quarto"
+              handleSelectHotel={handleSelectHotel}
+              selected={true}
+              id={hotelBooked.id}
+              urlImage={hotelBooked.image}
+              hotelName={hotelBooked.name}
+              hotelType={`${roomBooked.name} (${roomBooked.capacity === 1 ? 'Single' : roomBooked.capacity === 2 ? 'Double' : roomBooked.capacity === 3 ? 'triple' : ''})`}
+              hotelCapacity={`Você e mais ${roomBooked.capacity - roomBooked.available - 1}`}
+            />
+          </Hotels>
+          <Button onClick={handleChangeBooking}>TROCAR QUARTO</Button>
         </Container>
       )}
     </>
