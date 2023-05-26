@@ -1,8 +1,29 @@
 import styled from 'styled-components';
 import useTicket from '../../../hooks/api/useTicket';
+import FilterButton from '../../../components/Activities/FilterButton';
+import { useContext } from 'react';
+import EventInfoContext from '../../../contexts/EventInfoContext';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import api from '../../../services/api';
 
 export default function Hotel() {
   const { ticket } = useTicket();
+  const { eventInfo } = useContext(EventInfoContext);
+
+  const [activities, setActivities] = useState([]);
+
+  const days = new Date(eventInfo.startsAt);
+
+  const activitiesDays = [];
+  for (let i = 1; i < 4; i++) {
+    const currentDate = new Date(days.getTime() + i * 24 * 60 * 60 * 1000);
+    const activityDay = {
+      weekDay: currentDate.toLocaleDateString('pt-BR', { weekday: 'long' }),
+      date: currentDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+    };
+    activitiesDays.push(activityDay);
+  }
 
   return (
     <>
@@ -31,6 +52,11 @@ export default function Hotel() {
       {ticket && !ticket.TicketType.isRemote && (
         <Container>
           <Title>Escolha de atividades </Title>
+          <ButtonsContainer>
+            {activitiesDays.map((day) => (
+              <FilterButton weekDay={day.weekDay} date={day.date} setActivities={setActivities} />
+            ))}
+          </ButtonsContainer>
         </Container>
       )}
     </>
@@ -46,9 +72,9 @@ const Container = styled.div`
 
 const Title = styled.div`
   font-family: 'Roboto';
-    font-size: 34px;
-    line-height: 40px;
-    margin-bottom: 40px;
+  font-size: 34px;
+  line-height: 40px;
+  margin-bottom: 40px;
 `;
 
 const Notice = styled.div`
@@ -57,12 +83,12 @@ const Notice = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
- 
-h1 {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 400;
-  font-size: 34px;
-}
+
+  h1 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 34px;
+  }
   p {
     height: 46px;
     width: 470px;
@@ -72,4 +98,9 @@ h1 {
     text-align: center;
     color: #8e8e8e;
   }
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  gap: 15px;
 `;
