@@ -118,7 +118,7 @@ export default function TicketTypes() {
       </>
     );
   }
-  return <CreditCardsPage  userTicket={userTicket}/>;
+  return <CreditCardsPage userTicket={userTicket} />;
 }
 
 const Container = styled.div`

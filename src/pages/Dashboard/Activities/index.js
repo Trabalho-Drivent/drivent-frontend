@@ -1,9 +1,30 @@
 import styled from 'styled-components';
 import useTicket from '../../../hooks/api/useTicket';
 import ActivitiesConteiner from './ActivitiesConteiner';
+import FilterButton from '../../../components/Activities/FilterButton';
+import { useContext } from 'react';
+import EventInfoContext from '../../../contexts/EventInfoContext';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import api from '../../../services/api';
 
 export default function Hotel() {
   const { ticket } = useTicket();
+  const { eventInfo } = useContext(EventInfoContext);
+
+  const [activities, setActivities] = useState([]);
+
+  const days = new Date(eventInfo.startsAt);
+
+  const activitiesDays = [];
+  for (let i = 1; i < 4; i++) {
+    const currentDate = new Date(days.getTime() + i * 24 * 60 * 60 * 1000);
+    const activityDay = {
+      weekDay: currentDate.toLocaleDateString('pt-BR', { weekday: 'long' }),
+      date: currentDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+    };
+    activitiesDays.push(activityDay);
+  }
 
   return (
     <>
@@ -43,6 +64,11 @@ export default function Hotel() {
         <Container>
           <Title>Escolha de atividades </Title>
           <ActivitiesConteiner></ActivitiesConteiner>
+          <ButtonsContainer>
+            {activitiesDays.map((day) => (
+              <FilterButton weekDay={day.weekDay} date={day.date} setActivities={setActivities} />
+            ))}
+          </ButtonsContainer>
         </Container>
       )}
     </>
@@ -84,4 +110,9 @@ const Notice = styled.div`
     text-align: center;
     color: #8e8e8e;
   }
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  gap: 15px;
 `;
