@@ -3,20 +3,19 @@ import { FaFileDownload } from 'react-icons/fa';
 import useTicket from '../../../hooks/api/useTicket';
 import useEnrollment from '../../../hooks/api/useEnrollment';
 import html2canvas from 'html2canvas';
-import sign from '../../../assets/images/sign.png';
-import { useEffect, useState } from 'react';
+import  sign  from '../../../assets/images/sign.png';
+import { useEffect } from 'react';
 
 export default function Certificate() {
   const { ticket } = useTicket();
   const { enrollment } = useEnrollment();
-  const [userCertificate, setUserCertificate] = useState(null);
 
   // useEffect(() => {
-  //   const promise = 
+   
   // }, []);
 
   function generateImage() {
-    const element = document.getElementById('certificate');
+    const element = document.getElementById('certificade');
 
     html2canvas(element, {
       scale: 1,
@@ -50,7 +49,7 @@ export default function Certificate() {
         <Container>
           <Title>Certificado</Title>
 
-          <CertificateImg id="certificate">
+          <CertificateImg id="certificade">
             <Content>
               <h1>CERTIFICADO</h1>
               <h2>DE PARTICIPAÇÃO</h2>
@@ -205,7 +204,7 @@ const WrapperAssets = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 30px;
-  img {
+  img{
     max-width: 500px;
   }
 `;
