@@ -1,11 +1,22 @@
 import styled from 'styled-components';
 import useTicket from '../../../hooks/api/useTicket';
+import ActivitiesConteiner from './ActivitiesConteiner';
 
 export default function Hotel() {
   const { ticket } = useTicket();
 
   return (
     <>
+      {!ticket && (
+        <>
+          <Container>
+            <Title>Escolha de atividades </Title>
+            <Notice>
+              <p>Você precisa ter confirmado pagamento antes de fazer a escolha de atividades</p>
+            </Notice>
+          </Container>
+        </>
+      )}
       {ticket && ticket.status !== 'PAID' && (
         <>
           <Container>
@@ -31,6 +42,7 @@ export default function Hotel() {
       {ticket && !ticket.TicketType.isRemote && (
         <Container>
           <Title>Escolha de atividades </Title>
+          <ActivitiesConteiner></ActivitiesConteiner>
         </Container>
       )}
     </>
@@ -46,9 +58,9 @@ const Container = styled.div`
 
 const Title = styled.div`
   font-family: 'Roboto';
-    font-size: 34px;
-    line-height: 40px;
-    margin-bottom: 40px;
+  font-size: 34px;
+  line-height: 40px;
+  margin-bottom: 40px;
 `;
 
 const Notice = styled.div`
@@ -57,12 +69,12 @@ const Notice = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
- 
-h1 {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 400;
-  font-size: 34px;
-}
+
+  h1 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 34px;
+  }
   p {
     height: 46px;
     width: 470px;
