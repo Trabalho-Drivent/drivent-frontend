@@ -21,6 +21,7 @@ export default function ActivitiesConteiner() {
 }
 
 const Container = styled.div`
+  margin-bottom: 80px;
   font-weight: 400;
   font-size: 17px;
   line-height: 20px;

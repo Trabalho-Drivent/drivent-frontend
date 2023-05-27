@@ -52,10 +52,7 @@ const Text = styled.div`
   height: 80%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: flex-start;
-  font-family: 'Roboto';
-  font-style: normal;
   font-weight: 700;
   font-size: 12px;
   line-height: 14px;
@@ -63,8 +60,6 @@ const Text = styled.div`
 
   > h2 {
     font-weight: 400;
-    font-size: 12px;
-    line-height: 14px;
   }
 `;
 

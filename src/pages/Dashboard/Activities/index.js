@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import api from '../../../services/api';
 
-export default function Hotel() {
+export default function Activities() {
   const { ticket } = useTicket();
   const { eventInfo } = useContext(EventInfoContext);
 
@@ -63,12 +63,12 @@ export default function Hotel() {
       {ticket && !ticket.TicketType.isRemote && (
         <Container>
           <Title>Escolha de atividades </Title>
-          <ActivitiesConteiner></ActivitiesConteiner>
           <ButtonsContainer>
             {activitiesDays.map((day) => (
               <FilterButton weekDay={day.weekDay} date={day.date} setActivities={setActivities} />
             ))}
           </ButtonsContainer>
+          <ActivitiesConteiner></ActivitiesConteiner>
         </Container>
       )}
     </>
@@ -79,7 +79,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
 `;
 
 const Title = styled.div`
@@ -114,5 +114,6 @@ const Notice = styled.div`
 
 const ButtonsContainer = styled.div`
   display: flex;
+  padding-bottom: 80px;
   gap: 15px;
 `;
