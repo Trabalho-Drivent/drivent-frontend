@@ -3,13 +3,20 @@ import { FaFileDownload } from 'react-icons/fa';
 import useTicket from '../../../hooks/api/useTicket';
 import useEnrollment from '../../../hooks/api/useEnrollment';
 import html2canvas from 'html2canvas';
+import sign from '../../../assets/images/sign.png';
+import { useEffect, useState } from 'react';
 
 export default function Certificate() {
   const { ticket } = useTicket();
   const { enrollment } = useEnrollment();
+  const [userCertificate, setUserCertificate] = useState(null);
+
+  // useEffect(() => {
+  //   const promise = 
+  // }, []);
 
   function generateImage() {
-    const element = document.getElementById('certificade');
+    const element = document.getElementById('certificate');
 
     html2canvas(element, {
       scale: 1,
@@ -43,19 +50,18 @@ export default function Certificate() {
         <Container>
           <Title>Certificado</Title>
 
-          <CertificateImg id="certificade">
+          <CertificateImg id="certificate">
             <Content>
               <h1>CERTIFICADO</h1>
               <h2>DE PARTICIPAÇÃO</h2>
               <Text>Concedemos esse certificado a: </Text>
-              <TitleName>{enrollment.name}</TitleName>
+              <TitleName>name</TitleName>
               <Text>pela participação na(s) atividade(s) </Text>
               <ActivityName>adhgsuhoshoaas</ActivityName>
               <Text>com carga horária total de: 50 horas</Text>
 
               <WrapperAssets>
-                <p>________</p>
-                <p>Driven.T</p>
+                <img src={sign}></img>
               </WrapperAssets>
             </Content>
           </CertificateImg>
@@ -198,5 +204,8 @@ const WrapperAssets = styled.div`
   width: 500px;
   display: flex;
   justify-content: space-between;
-  margin-top: 50px;
+  margin-top: 30px;
+  img {
+    max-width: 500px;
+  }
 `;
