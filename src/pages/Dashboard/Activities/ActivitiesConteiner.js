@@ -7,7 +7,13 @@ export default function ActivitiesConteiner({ name, activity }) {
       <Box>
         <h1>{name}</h1>
         {activity.map((info) => (
-          <ActivitiesLocal title={info.name} start={info.startsAt} end={info.endsAt} slot={info.slot}></ActivitiesLocal>
+          <ActivitiesLocal
+            title={info.name}
+            start={info.startsAt}
+            end={info.endsAt}
+            slot={info.slot}
+            key={info.id}
+          ></ActivitiesLocal>
         ))}
       </Box>
     </Container>

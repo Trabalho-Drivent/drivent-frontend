@@ -8,7 +8,7 @@ export default function ActivitiesLocal({ title, start, end, slot }) {
     const time = data.toISOString().substring(11, 16);
     return time;
   }
-
+  const disableBackground = slot === 0 ? true : false;
   const startTime = start;
   const startObject = new Date(startTime);
 
@@ -18,7 +18,7 @@ export default function ActivitiesLocal({ title, start, end, slot }) {
   const height = endObject.getHours() - startObject.getHours();
 
   return (
-    <Activity height={height}>
+    <Activity height={height} disableBackground={disableBackground}>
       <Text>
         <h1>{title}</h1>
         <h2>

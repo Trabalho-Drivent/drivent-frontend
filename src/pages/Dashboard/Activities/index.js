@@ -70,7 +70,7 @@ export default function Activities() {
           </ButtonsContainer>
           <Box>
             {activities.map((local) => (
-              <ActivitiesConteiner name={local.name} activity={local.activities}></ActivitiesConteiner>
+              <ActivitiesConteiner name={local.name} activity={local.activities} key={local.id}></ActivitiesConteiner>
             ))}
           </Box>
         </Container>
