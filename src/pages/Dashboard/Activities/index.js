@@ -14,6 +14,8 @@ export default function Activities() {
 
   const [activities, setActivities] = useState([]);
 
+  const [selectedDay, setSelectedDay] = useState(null);
+
   const days = new Date(eventInfo.startsAt);
 
   const activitiesDays = [];
@@ -65,8 +67,15 @@ export default function Activities() {
         <Container>
           <Title>Escolha de atividades </Title>
           <ButtonsContainer>
-            {activitiesDays.map((day) => (
-              <FilterButton weekDay={day.weekDay} date={day.date} setActivities={setActivities} />
+            {activitiesDays.map((day, i) => (
+              <FilterButton
+                weekDay={day.weekDay}
+                date={day.date}
+                setActivities={setActivities}
+                selectedDay={selectedDay}
+                setSelectedDay={setSelectedDay}
+                i={i}
+              />
             ))}
           </ButtonsContainer>
           <Box>
