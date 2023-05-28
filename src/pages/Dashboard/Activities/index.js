@@ -84,11 +84,14 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow: scroll;
 `;
 
 const Box = styled.div`
   display: flex;
-  height: 392px;
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 const Title = styled.div`
   font-family: 'Roboto';

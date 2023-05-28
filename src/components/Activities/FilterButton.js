@@ -4,13 +4,13 @@ import useToken from '../../hooks/useToken';
 
 export default function FilterButton({ weekDay, date, setActivities }) {
   const token = useToken();
-  let isoDate = '';
+  let isoDate = '2023-05-12';
   if (date === '10/05') isoDate = '2023-05-10';
   if (date === '11/05') isoDate = '2023-05-11';
   if (date === '12/05') isoDate = '2023-05-12';
 
   async function filterActivities() {
-    const activitiesFilter = await api.get('/activities/2023-05-10', {
+    const activitiesFilter = await api.get(`/activities/${isoDate}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

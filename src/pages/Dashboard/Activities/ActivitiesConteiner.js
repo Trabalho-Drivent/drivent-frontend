@@ -10,14 +10,6 @@ export default function ActivitiesConteiner({ name, activity }) {
           <ActivitiesLocal title={info.name} start={info.startsAt} end={info.endsAt} slot={info.slot}></ActivitiesLocal>
         ))}
       </Box>
-      {/* <Box>
-        <h1>Auditório Lateral</h1>
-        <ActivitiesLocal></ActivitiesLocal>
-      </Box>
-      <Box>
-        <h1>Sala de Workshop</h1>
-        <ActivitiesLocal></ActivitiesLocal>
-      </Box> */}
     </Container>
   );
 }
@@ -34,5 +26,6 @@ const Container = styled.div`
 const Box = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid #D7D7D7;
+  border: 1px solid #d7d7d7;
+  overflow: scroll;
 `;
