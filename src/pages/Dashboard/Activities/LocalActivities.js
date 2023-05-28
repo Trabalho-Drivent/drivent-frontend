@@ -49,7 +49,7 @@ const Activity = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 7px;
-  width: 265px;
+  max-width: 265px;
   height: ${(props) => props.height * 79 + (props.height === 1 ? 0 : (props.height - 1) * 10)}px;
   background: #f1f1f1;
   border-radius: 5px;

@@ -6,15 +6,17 @@ export default function ActivitiesConteiner({ name, activity }) {
     <Container>
       <Box>
         <h1>{name}</h1>
-        {activity.map((info) => (
-          <ActivitiesLocal
-            title={info.name}
-            start={info.startsAt}
-            end={info.endsAt}
-            slot={info.slot}
-            key={info.id}
-          ></ActivitiesLocal>
-        ))}
+        <Line>
+          {activity.map((info) => (
+            <ActivitiesLocal
+              title={info.name}
+              start={info.startsAt}
+              end={info.endsAt}
+              slot={info.slot}
+              key={info.id}
+            ></ActivitiesLocal>
+          ))}
+        </Line>
       </Box>
     </Container>
   );
@@ -29,9 +31,14 @@ const Container = styled.div`
   display: flex;
 `;
 
+const Line = styled.div`
+  height: 100%;
+  border: 1px solid #d7d7d7;
+  width: auto;
+`;
 const Box = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid #d7d7d7;
+
   overflow: scroll;
 `;
