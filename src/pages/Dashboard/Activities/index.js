@@ -68,7 +68,11 @@ export default function Activities() {
               <FilterButton weekDay={day.weekDay} date={day.date} setActivities={setActivities} />
             ))}
           </ButtonsContainer>
-          <ActivitiesConteiner></ActivitiesConteiner>
+          <Box>
+            {activities.map((local) => (
+              <ActivitiesConteiner name={local.name} activity={local.activities}></ActivitiesConteiner>
+            ))}
+          </Box>
         </Container>
       )}
     </>
@@ -82,6 +86,10 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
+const Box = styled.div`
+  display: flex;
+  height: 392px;
+`;
 const Title = styled.div`
   font-family: 'Roboto';
   font-size: 34px;

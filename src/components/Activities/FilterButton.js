@@ -10,7 +10,7 @@ export default function FilterButton({ weekDay, date, setActivities }) {
   if (date === '12/05') isoDate = '2023-05-12';
 
   async function filterActivities() {
-    const activitiesFilter = await api.get(`/activities/${isoDate}`, {
+    const activitiesFilter = await api.get('/activities/2023-05-10', {
       headers: {
         Authorization: `Bearer ${token}`,
       },

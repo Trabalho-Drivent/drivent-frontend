@@ -1,27 +1,28 @@
 import styled from 'styled-components';
 import ActivitiesLocal from './LocalActivities';
 
-export default function ActivitiesConteiner() {
+export default function ActivitiesConteiner({ name, activity }) {
   return (
     <Container>
       <Box>
-        <h1>Auditório Principal</h1>
-        <ActivitiesLocal></ActivitiesLocal>
+        <h1>{name}</h1>
+        {activity.map((info) => (
+          <ActivitiesLocal title={info.name} start={info.startsAt} end={info.endsAt} slot={info.slot}></ActivitiesLocal>
+        ))}
       </Box>
-      <Box>
+      {/* <Box>
         <h1>Auditório Lateral</h1>
         <ActivitiesLocal></ActivitiesLocal>
       </Box>
       <Box>
         <h1>Sala de Workshop</h1>
         <ActivitiesLocal></ActivitiesLocal>
-      </Box>
+      </Box> */}
     </Container>
   );
 }
 
 const Container = styled.div`
-  margin-bottom: 80px;
   font-weight: 400;
   font-size: 17px;
   line-height: 20px;
@@ -31,8 +32,7 @@ const Container = styled.div`
 `;
 
 const Box = styled.div`
-  width: 100vw;
-
   display: flex;
   flex-direction: column;
+  border: 1px black solid;
 `;
