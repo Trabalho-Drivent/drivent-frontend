@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import useTicket from '../../../hooks/api/useTicket';
+import ActivitiesConteiner from './ActivitiesConteiner';
 import FilterButton from '../../../components/Activities/FilterButton';
 import { useContext } from 'react';
 import EventInfoContext from '../../../contexts/EventInfoContext';
@@ -7,7 +8,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import api from '../../../services/api';
 
-export default function Hotel() {
+export default function Activities() {
   const { ticket } = useTicket();
   const { eventInfo } = useContext(EventInfoContext);
 
@@ -27,6 +28,16 @@ export default function Hotel() {
 
   return (
     <>
+      {!ticket && (
+        <>
+          <Container>
+            <Title>Escolha de atividades </Title>
+            <Notice>
+              <p>Você precisa ter confirmado pagamento antes de fazer a escolha de atividades</p>
+            </Notice>
+          </Container>
+        </>
+      )}
       {ticket && ticket.status !== 'PAID' && (
         <>
           <Container>
@@ -57,6 +68,11 @@ export default function Hotel() {
               <FilterButton weekDay={day.weekDay} date={day.date} setActivities={setActivities} />
             ))}
           </ButtonsContainer>
+          <Box>
+            {activities.map((local) => (
+              <ActivitiesConteiner name={local.name} activity={local.activities} key={local.id}></ActivitiesConteiner>
+            ))}
+          </Box>
         </Container>
       )}
     </>
@@ -67,9 +83,16 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  overflow: scroll;
 `;
 
+const Box = styled.div`
+  display: flex;
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+`;
 const Title = styled.div`
   font-family: 'Roboto';
   font-size: 34px;
@@ -102,5 +125,6 @@ const Notice = styled.div`
 
 const ButtonsContainer = styled.div`
   display: flex;
+  padding-bottom: 80px;
   gap: 15px;
 `;

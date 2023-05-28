@@ -4,7 +4,7 @@ import useToken from '../../hooks/useToken';
 
 export default function FilterButton({ weekDay, date, setActivities }) {
   const token = useToken();
-  let isoDate = '';
+  let isoDate = '2023-05-12'; //REMOVER ISTO QUANDO CONSERTAR O SEED. ESTAVA -> let isoDate = '';
   if (date === '10/05') isoDate = '2023-05-10';
   if (date === '11/05') isoDate = '2023-05-11';
   if (date === '12/05') isoDate = '2023-05-12';
