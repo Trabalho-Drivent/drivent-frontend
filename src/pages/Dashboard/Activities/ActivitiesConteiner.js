@@ -34,5 +34,5 @@ const Container = styled.div`
 const Box = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px black solid;
+  border: 1px solid #D7D7D7;
 `;
