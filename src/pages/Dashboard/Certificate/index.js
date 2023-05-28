@@ -1,21 +1,40 @@
 import styled from 'styled-components';
 import { FaFileDownload } from 'react-icons/fa';
-import useTicket from '../../../hooks/api/useTicket';
-import useEnrollment from '../../../hooks/api/useEnrollment';
 import html2canvas from 'html2canvas';
-import  sign  from '../../../assets/images/sign.png';
-import { useEffect } from 'react';
+import sign from '../../../assets/images/sign.png';
+import { useEffect, useState } from 'react';
+import { getEventInfo } from '../../../services/eventApi';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import useGetEnrollment from '../../../hooks/api/useGetEnrollment';
 
 export default function Certificate() {
-  const { ticket } = useTicket();
-  const { enrollment } = useEnrollment();
+  const [startAt, setStartAt] = useState('');
+  const [ticket, setTicket] = useState(null);
+  const [eventName, setEventName] = useState('');
+  const { userEnrollment } = useGetEnrollment();
 
-  // useEffect(() => {
-   
-  // }, []);
+  async function days() {
+    try {
+      const response = await getEventInfo();
+      const { startsAt, endsAt, title } = response;
+      const start = new Date(startsAt);
+      const end = new Date(endsAt);
+      const newStartAt = format(new Date(startsAt), 'dd \'de\' MMMM \'de\' yyyy', { locale: ptBR });
+      setStartAt(newStartAt);
+      setTicket(response);
+      setEventName(title);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    days();
+  }, []);
 
   function generateImage() {
-    const element = document.getElementById('certificade');
+    const element = document.getElementById('certificate');
 
     html2canvas(element, {
       scale: 1,
@@ -40,37 +59,36 @@ export default function Certificate() {
     });
   }
 
-  console.log(enrollment);
-
   return (
     <>
       <>
-        {/* (if)*/}
-        <Container>
-          <Title>Certificado</Title>
+        {userEnrollment && (
+          <Container>
+            <Title>Certificado</Title>
 
-          <CertificateImg id="certificade">
-            <Content>
-              <h1>CERTIFICADO</h1>
-              <h2>DE PARTICIPAÇÃO</h2>
-              <Text>Concedemos esse certificado a: </Text>
-              <TitleName>name</TitleName>
-              <Text>pela participação na(s) atividade(s) </Text>
-              <ActivityName>adhgsuhoshoaas</ActivityName>
-              <Text>com carga horária total de: 50 horas</Text>
+            <CertificateImg id="certificate">
+              <Content>
+                <h1>CERTIFICADO</h1>
+                <h2>DE PARTICIPAÇÃO</h2>
+                <Text>Concedemos esse certificado a: </Text>
+                <TitleName>{userEnrollment.name}</TitleName>
+                <Text>pela participação no evento </Text>
+                <ActivityName>{eventName}</ActivityName>
+                <Text>na data de {startAt}. </Text>
 
-              <WrapperAssets>
-                <img src={sign}></img>
-              </WrapperAssets>
-            </Content>
-          </CertificateImg>
-          <WrapperButton>
-            <Button onClick={() => generateImage()}>
-              <p>Baixar Certificado</p>
-              <FaFileDownload size={24} />
-            </Button>
-          </WrapperButton>
-        </Container>
+                <WrapperAssets>
+                  <img src={sign}></img>
+                </WrapperAssets>
+              </Content>
+            </CertificateImg>
+            <WrapperButton>
+              <Button onClick={() => generateImage()}>
+                <p>Baixar Certificado</p>
+                <FaFileDownload size={24} />
+              </Button>
+            </WrapperButton>
+          </Container>
+        )}
       </>
       {/* <>
       //verificar atividade
@@ -204,7 +222,7 @@ const WrapperAssets = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 30px;
-  img{
+  img {
     max-width: 500px;
   }
 `;
