@@ -17,7 +17,7 @@ export default function Activities() {
   const days = new Date(eventInfo.startsAt);
 
   const activitiesDays = [];
-  for (let i = 1; i < 4; i++) {
+  for (let i = 0; i < 3; i++) {
     const currentDate = new Date(days.getTime() + i * 24 * 60 * 60 * 1000);
     const activityDay = {
       weekDay: currentDate.toLocaleDateString('pt-BR', { weekday: 'long' }),
@@ -26,6 +26,7 @@ export default function Activities() {
     activitiesDays.push(activityDay);
   }
 
+  console.log(activities);
   return (
     <>
       {!ticket && (
@@ -69,9 +70,10 @@ export default function Activities() {
             ))}
           </ButtonsContainer>
           <Box>
-            {activities.map((local) => (
-              <ActivitiesConteiner name={local.name} activity={local.activities} key={local.id}></ActivitiesConteiner>
-            ))}
+            {activities &&
+              activities.map((local) => (
+                <ActivitiesConteiner name={local.name} activity={local.activities} key={local.id}></ActivitiesConteiner>
+              ))}
           </Box>
         </Container>
       )}
