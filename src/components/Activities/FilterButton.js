@@ -1,28 +1,18 @@
 import styled from 'styled-components';
-import api from '../../services/api';
 import useToken from '../../hooks/useToken';
+import { activitiesFilter } from '../../services/activityApi';
 
 export default function FilterButton({ weekDay, date, setActivities, selectedDay, setSelectedDay, i }) {
   const token = useToken();
-
   let year = new Date().getFullYear();
-
   let split = date.split('/');
-
-  let formatedDate = year + '-' + split[1] + '-' + split[0];
+  let formattedDate = year + '-' + split[1] + '-' + split[0];
 
   async function filterActivities() {
     setSelectedDay(i);
-    const activitiesFilter = await api.get(`/activities/${formatedDate}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    setActivities(activitiesFilter.data);
+    const data = await activitiesFilter(token, formattedDate);
+    setActivities(data);
   }
-  console.log(selectedDay);
-  console.log(i);
 
   return (
     <>
@@ -36,7 +26,7 @@ export default function FilterButton({ weekDay, date, setActivities, selectedDay
 }
 
 const DayButton = styled.button`
-  width: 131px;
+  width: 150px;
   height: 37px;
   background: ${(props) => (props.selectedDay === props.i ? '#FFD37D' : '#E0E0E0')};
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
