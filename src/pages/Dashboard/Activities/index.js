@@ -1,20 +1,27 @@
 import styled from 'styled-components';
 import useTicket from '../../../hooks/api/useTicket';
-import ActivitiesConteiner from './ActivitiesConteiner';
+import ActivitiesContainer from './ActivitiesContainer';
 import FilterButton from '../../../components/Activities/FilterButton';
 import { useContext } from 'react';
 import EventInfoContext from '../../../contexts/EventInfoContext';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import api from '../../../services/api';
+import { getUserActivities } from '../../../services/activityApi';
+import useToken from '../../../hooks/useToken';
 
 export default function Activities() {
+  const token = useToken();
   const { ticket } = useTicket();
   const { eventInfo } = useContext(EventInfoContext);
 
+  const [userActivities, setUserActivities] = useState([]);
   const [activities, setActivities] = useState([]);
-
   const [selectedDay, setSelectedDay] = useState(null);
+
+  useEffect(async() => {
+    let data = await getUserActivities(token);
+    setUserActivities(data);
+  }, []);
 
   const days = new Date(eventInfo.startsAt);
 
@@ -27,8 +34,7 @@ export default function Activities() {
     };
     activitiesDays.push(activityDay);
   }
-
-  console.log(activities);
+  
   return (
     <>
       {!ticket && (
@@ -74,16 +80,25 @@ export default function Activities() {
                 setActivities={setActivities}
                 selectedDay={selectedDay}
                 setSelectedDay={setSelectedDay}
+                key={i}
                 i={i}
               />
             ))}
           </ButtonsContainer>
-          <Box>
+          <ActivitiesBox>
             {activities &&
               activities.map((local) => (
-                <ActivitiesConteiner name={local.name} activity={local.activities} key={local.id}></ActivitiesConteiner>
+                <ActivitiesColumn>
+                  <div className="title">{local.name}</div>
+                  <ActivitiesContainer
+                    name={local.name}
+                    activity={local.activities}
+                    key={local.id}
+                    userActivities={userActivities}
+                  />
+                </ActivitiesColumn>
               ))}
-          </Box>
+          </ActivitiesBox>
         </Container>
       )}
     </>
@@ -95,13 +110,23 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow: scroll;
+  overflow: hidden;
 `;
 
-const Box = styled.div`
+const ActivitiesBox = styled.div`
   display: flex;
+  height: 390px;
   @media (max-width: 600px) {
     flex-direction: column;
+  }
+`;
+const ActivitiesColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  .title{
+    color: #7B7B7B;
   }
 `;
 const Title = styled.div`
@@ -136,6 +161,6 @@ const Notice = styled.div`
 
 const ButtonsContainer = styled.div`
   display: flex;
-  padding-bottom: 80px;
+  padding-bottom: 50px;
   gap: 15px;
 `;
